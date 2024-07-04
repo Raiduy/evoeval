@@ -55,5 +55,5 @@ if __name__ == "__main__":
     df = get_solved(sol_folder, evoeval_subset)
     df = finalize_results(df)
     print(df)
-    df.to_csv(f'{evoeval_subset}_results.csv', index=False)
+    df.to_csv(f'./llm_summaries/{evoeval_subset}_results.csv', index=False)
 
