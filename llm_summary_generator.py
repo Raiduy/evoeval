@@ -6,7 +6,9 @@ from textwrap import indent
 import pandas as pd
 
 SOLUTIONS_FOLDER = './solutions'
-
+EVAL_SUBSETS = ["EvoEval_combine", "EvoEval_creative", "EvoEval_subtle", 
+                "EvoEval_verbose", "EvoEval_concise", "EvoEval_difficult", 
+                "EvoEval_tool_use", "humaneval"]
 
 def parse_json(path):
     counter = 0
@@ -37,23 +39,26 @@ def get_solved(sol_folder, subset):
     return df
 
 def finalize_results(df):
-    intersection = df[df['LLM'] == 'qwen-7b-1.5_temp_0.0']['solved_ids'].values[0]
+    solved_min = df['solved_num'].min()
+    intersection = df[df['solved_num'] == solved_min]['solved_ids'].values[0]
     for id_list in df['solved_ids'].values:
         intersection = set(intersection).intersection(set(id_list))
     tmp = pd.DataFrame({'LLM': 'Intersection', 
                         'solved_num': len(intersection), 
                         'solved_ids': [list(intersection)]})
-    print(intersection)
-    print(tmp)
     df = pd.concat([df, tmp])
-    print(df)
     return df
 
 if __name__ == "__main__":
     sol_folder = sys.argv[1]
-    evoeval_subset = sys.argv[2]
-    df = get_solved(sol_folder, evoeval_subset)
-    df = finalize_results(df)
-    print(df)
-    df.to_csv(f'./llm_summaries/{evoeval_subset}_results.csv', index=False)
+    if len(sys.argv) > 2:
+        EVAL_SUBSETS = [sys.argv[2]]
+    for evoeval_subset in EVAL_SUBSETS:
+        df = get_solved(sol_folder, evoeval_subset)
+        df = finalize_results(df)
+        print(f'{evoeval_subset}: {df["solved_num"].tail(1).values[0]}')
+        df.to_csv(f'./llm_summaries/{evoeval_subset}_results.csv', index=False)
+
+# python3 ./llm_summary_generator.py ./solutions", "EvoEval_combine
+
 
