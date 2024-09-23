@@ -1,0 +1,6 @@
+def treasure_hunt(grid, bag_capacity):
+    import math
+    '\n    You are an intrepid treasure hunter in a mysterious pyramid. The pyramid is represented by a rectangular grid, \n    where each row represents a different chamber and each 1 represents a single treasure chest. \n    Each chamber has a certain number of treasures and you have a bag that can carry a limited number of chests at a time. \n    Your task is to collect as many treasures as possible. \n    Output the number of trips you need to collect all treasures.\n    A trip is defined as a going in or out of the pyramid (i.e., enter is a separate trip to exist)\n\n    Example 1:\n        Input: \n            grid : [[0,0,1,0], [0,1,0,0], [1,1,1,1]]\n            bag_capacity : 1\n        Output: 12\n\n    Example 2:\n        Input: \n            grid : [[0,0,1,1], [0,0,0,0], [1,1,1,1], [0,1,1,1]]\n            bag_capacity : 2\n        Output: 10\n    \n    Example 3:\n        Input: \n            grid : [[0,0,0], [0,0,0]]\n            bag_capacity : 5\n        Output: 0\n\n    Constraints:\n        * all chambers have the same number of chests\n        * grid[i][j] -> 0 | 1\n    '
+    total_treasures = sum((sum(row) for row in grid))
+    trips = math.ceil(total_treasures / bag_capacity) * 2
+    return trips

@@ -1,0 +1,3 @@
+
+def special_factorial(n):
+    ...
